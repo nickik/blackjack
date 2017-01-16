@@ -1,5 +1,5 @@
 FROM java:8-alpine
-MAINTAINER Your Name <you@example.com>
+MAINTAINER Nick Zbinden <me@nzmail.com>
 
 ADD target/blackjack-0.0.1-SNAPSHOT-standalone.jar /blackjack/app.jar
 
