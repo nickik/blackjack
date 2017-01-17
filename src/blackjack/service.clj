@@ -2,7 +2,9 @@
   (:require [io.pedestal.http :as http]
             [io.pedestal.http.route :as route]
             [io.pedestal.http.body-params :as body-params]
-            [ring.util.response :as ring-resp]))
+            [ring.util.response :as ring-resp]
+            [blackjack.game :as game]
+            [clojure.spec :as s]))
 
 (defn about-page
   [request]
@@ -12,7 +14,35 @@
 
 (defn home-page
   [request]
-  (ring-resp/response "Hello World! Pedestul"))
+  (ring-resp/response (format "Go to <a href='%s'> %s </a> to see a test situation, complete the situation and send results with POST to %s"
+                              (route/url-for ::situation-page)
+                              (route/url-for ::situation-page)
+                              (route/url-for ::situation-page)) ))
+
+(defn situation-page
+  [request]
+  (let [situation (game/generate-random-situation)]
+    (ring-resp/response (str (str "<p> Dealer:<br> " (::game/dealer-hand situation) "</p>" "<br><br><p> Player: <br> " (::game/player-hand situation) "</p>")
+                             (apply str (map #(str "<button> " % "</button><br>") (vec (s/describe ::game/move)))))
+                        )))
+
+
+
+
+(defn situation-post-page
+  [request]
+  (let [solution (:edn-params request)]
+
+    (println "stuff: ")
+    (clojure.pprint/pprint solution)
+
+    (if (s/valid? ::game/resolved-situation solution)
+      (if (= (game/correct-action solution)
+             (::game/move solution))
+        (ring-resp/response "ok")
+        (ring-resp/response "incorrect"))
+      (ring-resp/response "unvalid input"))))
+
 
 ;; Defines "/" and "/about" routes with their associated :get handlers.
 ;; The interceptors defined after the verb map (e.g., {:get home-page}
@@ -20,13 +50,15 @@
 (def common-interceptors [(body-params/body-params) http/html-body])
 
 ;; Tabular routes
-(def routes #{["/" :get (conj common-interceptors `home-page)]
+#_(def routes #{["/" :get (conj common-interceptors `home-page)]
               ["/about" :get (conj common-interceptors `about-page)]})
 
 ;; Map-based routes
-;(def routes `{"/" {:interceptors [(body-params/body-params) http/html-body]
-;                   :get home-page
-;                   "/about" {:get about-page}}})
+(def routes `{"/" {:interceptors [(body-params/body-params) http/html-body]
+                   :get home-page
+                   "/about" {:get about-page}
+                   "/situation" {:get situation-page
+                                 :post situation-post-page}}})
 
 ;; Terse/Vector-based routes
 ;(def routes
