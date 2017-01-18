@@ -1,15 +1,11 @@
-# blackjack
+# Simple Blackjack Training API
 
-FIXME
+
 
 ## Getting Started
 
 1. Start the application: `lein run`
 2. Go to [localhost:8080](http://localhost:8080/) to see: `Hello World!`
-3. Read your app's source code at src/blackjack/service.clj. Explore the docs of functions
-   that define routes and responses.
-4. Run your app's tests with `lein test`. Read the tests at test/blackjack/service_test.clj.
-5. Learn more! See the [Links section below](#links).
 
 
 ## Configuration
@@ -31,15 +27,4 @@ To learn more about configuring Logback, read its [documentation](http://logback
 2. Build a Docker image: `sudo docker build -t blackjack .`
 3. Run your Docker image: `docker run -p 8080:8080 blackjack`
 
-### [OSv](http://osv.io/) unikernel support with [Capstan](http://osv.io/capstan/)
-
-1. Build and run your image: `capstan run -f "8080:8080"`
-
-Once the image it built, it's cached.  To delete the image and build a new one:
-
-1. `capstan rmi blackjack; capstan build`
-
-
-## Links
-* [Other examples](https://github.com/pedestal/samples)
 
