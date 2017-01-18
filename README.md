@@ -5,7 +5,7 @@
 ## Getting Started
 
 1. Start the application: `lein run`
-2. Go to [localhost:8080](http://localhost:8080/) to see: `Hello World!`
+2. Go to [localhost:8080](http://localhost:8080/)
 
 
 ## Configuration
